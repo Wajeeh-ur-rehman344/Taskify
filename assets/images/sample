@@ -1,0 +1,187 @@
+import 'package:flutter/material.dart';
+
+class Status1 extends StatefulWidget {
+  final String selectedTime;
+
+  const Status1({super.key, required this.selectedTime});
+
+  @override
+  _DestinationScreenState createState() => _DestinationScreenState();
+}
+
+class _DestinationScreenState extends State<Status1> {
+  int statusIndex = 0;
+  final List<String> statuses = [
+    "Collected",
+    "Toward Destination",
+    "Completed"
+  ];
+  final List<String> ongoingStatuses = ["ONGOING", "IN TRANSIT", "DELIVERED"];
+
+  void updateStatus() {
+    setState(() {
+      if (statusIndex < statuses.length - 1) {
+        statusIndex++;
+      }
+    });
+  }
+
+  void navigateToChatScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ChatScreen()), // Define ChatScreen
+    );
+  }
+
+  void navigateToCallScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CallScreen()), // Define CallScreen
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              color: const Color.fromARGB(255, 246, 240, 240), // Placeholder for Google Map
+              child: Center(child: Text("Map Placeholder")),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              padding: EdgeInsets.all(16),
+              margin: EdgeInsets.only(top: 50),
+              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: BoxDecoration(
+                color: Color(0xFF800000), // Set container color to Color(0xFF800000)
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "AWAY FROM DESTINATION",
+                    style: TextStyle(
+                      color: Colors.white, // Set text color to white
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "${widget.selectedTime} Mins",
+                    style: TextStyle(
+                      color: Colors.white, // Set text color to white
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: EdgeInsets.all(20),
+              height: 220,
+              decoration: BoxDecoration(
+                color: Colors.white, // Set container color to white
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 28,
+                        backgroundImage: AssetImage(
+                            "assets/profile.jpg"), // Replace with network image if needed
+                      ),
+                      SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Jack",
+                            style: TextStyle(
+                              color: Color(0xFF800000), // Set text color to Color(0xFF800000)
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            ongoingStatuses[statusIndex],
+                            style: TextStyle(
+                              color: Color(0xFF800000), // Set text color to Color(0xFF800000)
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(Icons.phone, color: Color(0xFF800000), size: 28),
+                        onPressed: navigateToCallScreen,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.chat, color: Color(0xFF800000), size: 28),
+                        onPressed: navigateToChatScreen,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF800000),
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: updateStatus,
+                      child: Text(
+                        statuses[statusIndex],
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Dummy Chat Screen
+class ChatScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Chat with Jack")),
+      body: Center(child: Text("Chat Screen")),
+    );
+  }
+}
+
+// Dummy Call Screen
+class CallScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Call Jack")),
+      body: Center(child: Text("Call Screen")),
+    );
+  }
+}
